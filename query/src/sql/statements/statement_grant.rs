@@ -65,7 +65,7 @@ impl DfGrantObject {
 
 #[async_trait::async_trait]
 impl AnalyzableStatement for DfGrantPrivilegeStatement {
-    #[tracing::instrument(level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
     async fn analyze(&self, ctx: Arc<QueryContext>) -> Result<AnalyzedResult> {
         let grant_object = self.on.convert_to_grant_object(ctx);
 
@@ -93,7 +93,7 @@ pub struct DfGrantRoleStatement {
 
 #[async_trait::async_trait]
 impl AnalyzableStatement for DfGrantRoleStatement {
-    #[tracing::instrument(level = "debug", skip(self, _ctx), fields(_ctx.id = _ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, _ctx), fields(_ctx.id = _ctx.get_id().as_str()))]
     async fn analyze(&self, _ctx: Arc<QueryContext>) -> Result<AnalyzedResult> {
         Ok(AnalyzedResult::SimpleQuery(Box::new(PlanNode::GrantRole(
             GrantRolePlan {

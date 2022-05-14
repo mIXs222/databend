@@ -874,7 +874,7 @@ async fn assert_get_kv(
 }
 
 /// Wait for the known leader of a raft to become the expected `leader_id` until a default 2000 ms time out.
-#[tracing::instrument(level = "info", skip(mn))]
+#[tracing::instrument(err(Debug), level = "info", skip(mn))]
 pub async fn wait_for_current_leader(
     mn: &MetaNode,
     leader_id: NodeId,
@@ -888,21 +888,21 @@ pub async fn wait_for_current_leader(
 }
 
 /// Wait for raft log to become the expected `index` until a default 2000 ms time out.
-#[tracing::instrument(level = "info", skip(mn))]
+#[tracing::instrument(err(Debug), level = "info", skip(mn))]
 async fn wait_for_log(mn: &MetaNode, index: u64) -> anyhow::Result<RaftMetrics> {
     let metrics = mn.raft.wait(timeout()).log(Some(index), "").await?;
     Ok(metrics)
 }
 
 /// Wait for raft state to become the expected `state` until a default 2000 ms time out.
-#[tracing::instrument(level = "debug", skip(mn))]
+#[tracing::instrument(err(Debug), level = "debug", skip(mn))]
 pub async fn wait_for_state(mn: &MetaNode, state: openraft::State) -> anyhow::Result<RaftMetrics> {
     let metrics = mn.raft.wait(timeout()).state(state, "").await?;
     Ok(metrics)
 }
 
 /// Wait for raft metrics to become a state that satisfies `func`.
-#[tracing::instrument(level = "debug", skip(mn, func))]
+#[tracing::instrument(err(Debug), level = "debug", skip(mn, func))]
 async fn wait_for<T>(mn: &MetaNode, func: T) -> anyhow::Result<RaftMetrics>
 where T: Fn(&RaftMetrics) -> bool + Send {
     let metrics = mn.raft.wait(timeout()).metrics(func, "").await?;

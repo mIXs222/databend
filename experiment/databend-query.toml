@@ -1,0 +1,43 @@
+[log]
+level = "INFO"
+dir = "benddata/_logs"
+
+[query]
+# For admin RESET API.
+admin_api_address = "127.0.0.1:8001"
+
+# Metrics.
+metric_api_address = "127.0.0.1:7071"
+
+# Cluster flight RPC.
+flight_api_address = "127.0.0.1:9091"
+
+# Query MySQL Handler.
+mysql_handler_host = "127.0.0.1"
+mysql_handler_port = 3307
+
+# Query ClickHouse Handler.
+clickhouse_handler_host = "127.0.0.1"
+clickhouse_handler_port = 9001
+
+# Query HTTP Handler.
+http_handler_host = "127.0.0.1"
+http_handler_port = 8081
+
+tenant_id = "tenant1"
+cluster_id = "cluster1"
+
+[meta]
+address = "127.0.0.1:9101"
+username = "root"
+password = "root"
+
+[storage]
+# s3
+type = "s3"
+
+[storage.s3]
+bucket = "databend"
+endpoint_url = "http://127.0.0.1:9900"
+access_key_id = "minioadmin"
+secret_access_key = "minioadmin"

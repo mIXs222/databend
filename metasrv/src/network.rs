@@ -71,7 +71,7 @@ impl Network {
         }
     }
 
-    #[tracing::instrument(level = "debug", skip(self), fields(id=self.sto.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self), fields(id=self.sto.id))]
     pub async fn make_client(&self, target: &NodeId) -> anyhow::Result<RaftServiceClient<Channel>> {
         let endpoint = self.sto.get_node_endpoint(target).await?;
         let addr = format!("http://{}", endpoint);
@@ -89,7 +89,7 @@ impl Network {
 
 #[async_trait]
 impl RaftNetwork<LogEntry> for Network {
-    #[tracing::instrument(level = "debug", skip(self), fields(id=self.sto.id, rpc=%rpc.summary()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self), fields(id=self.sto.id, rpc=%rpc.summary()))]
     async fn send_append_entries(
         &self,
         target: NodeId,
@@ -111,7 +111,7 @@ impl RaftNetwork<LogEntry> for Network {
         Ok(resp)
     }
 
-    #[tracing::instrument(level = "debug", skip(self), fields(id=self.sto.id, rpc=%rpc.summary()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self), fields(id=self.sto.id, rpc=%rpc.summary()))]
     async fn send_install_snapshot(
         &self,
         target: NodeId,
@@ -131,7 +131,7 @@ impl RaftNetwork<LogEntry> for Network {
         Ok(resp)
     }
 
-    #[tracing::instrument(level = "debug", skip(self), fields(id=self.sto.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self), fields(id=self.sto.id))]
     async fn send_vote(&self, target: NodeId, rpc: VoteRequest) -> anyhow::Result<VoteResponse> {
         tracing::debug!("vote: req to: target={} {:?}", target, rpc);
 

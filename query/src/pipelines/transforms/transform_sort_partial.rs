@@ -69,7 +69,7 @@ impl Processor for SortPartialTransform {
         self
     }
 
-    #[tracing::instrument(level = "debug", name = "sort_partial_execute", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", name = "sort_partial_execute", skip(self))]
     async fn execute(&self) -> Result<SendableDataBlockStream> {
         tracing::debug!("execute...");
 

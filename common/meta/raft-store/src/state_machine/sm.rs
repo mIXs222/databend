@@ -130,7 +130,7 @@ impl StateMachine {
         config.tree_name(format!("{}/{}", TREE_STATE_MACHINE, sm_id))
     }
 
-    #[tracing::instrument(level = "debug", skip(config), fields(config_id=config.config_id.as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(config), fields(config_id=config.config_id.as_str()))]
     pub fn clean(config: &RaftConfig, sm_id: u64) -> Result<(), MetaStorageError> {
         let tree_name = StateMachine::tree_name(config, sm_id);
 
@@ -143,7 +143,7 @@ impl StateMachine {
         Ok(())
     }
 
-    #[tracing::instrument(level = "debug", skip(config), fields(config_id=config.config_id.as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(config), fields(config_id=config.config_id.as_str()))]
     pub async fn open(config: &RaftConfig, sm_id: u64) -> Result<StateMachine, MetaStorageError> {
         let db = get_sled_db();
 
@@ -219,7 +219,7 @@ impl StateMachine {
     /// If a duplicated log entry is detected by checking data.txid, no update
     /// will be made and the previous resp is returned. In this way a client is able to re-send a
     /// command safely in case of network failure etc.
-    #[tracing::instrument(level = "debug", skip(self, entry), fields(log_id=%entry.log_id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, entry), fields(log_id=%entry.log_id))]
     pub async fn apply(&self, entry: &Entry<LogEntry>) -> Result<AppliedState, MetaStorageError> {
         tracing::debug!("apply: summary: {}", entry.summary());
         tracing::debug!("apply: payload: {:?}", entry.payload);
@@ -290,7 +290,7 @@ impl StateMachine {
         Ok(applied_state)
     }
 
-    #[tracing::instrument(level = "debug", skip(self, txn_tree))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, txn_tree))]
     fn apply_incr_seq_cmd(
         &self,
         key: &str,
@@ -301,7 +301,7 @@ impl StateMachine {
         Ok(r.into())
     }
 
-    #[tracing::instrument(level = "debug", skip(self, txn_tree))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, txn_tree))]
     fn apply_add_node_cmd(
         &self,
         node_id: &u64,
@@ -321,7 +321,7 @@ impl StateMachine {
         }
     }
 
-    #[tracing::instrument(level = "debug", skip(self, txn_tree))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, txn_tree))]
     fn apply_remove_node_cmd(
         &self,
         node_id: &u64,
@@ -338,7 +338,7 @@ impl StateMachine {
         Ok((prev, None).into())
     }
 
-    #[tracing::instrument(level = "debug", skip(self, txn_tree))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, txn_tree))]
     fn apply_update_kv_cmd(
         &self,
         key: &str,
@@ -400,7 +400,7 @@ impl StateMachine {
         }
     }
 
-    #[tracing::instrument(level = "debug", skip(self, txn_tree, cond))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, txn_tree, cond))]
     fn txn_execute_one_condition(
         &self,
         txn_tree: &TransactionSledTree,
@@ -442,7 +442,7 @@ impl StateMachine {
         Ok(false)
     }
 
-    #[tracing::instrument(level = "debug", skip(self, txn_tree, condition))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, txn_tree, condition))]
     fn txn_execute_condition(
         &self,
         txn_tree: &TransactionSledTree,
@@ -545,7 +545,7 @@ impl StateMachine {
         Ok(())
     }
 
-    #[tracing::instrument(level = "debug", skip(self, txn_tree, op, resp))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, txn_tree, op, resp))]
     fn txn_execute_operation(
         &self,
         txn_tree: &TransactionSledTree,
@@ -569,7 +569,7 @@ impl StateMachine {
         Ok(())
     }
 
-    #[tracing::instrument(level = "debug", skip(self, txn_tree, req))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, txn_tree, req))]
     fn apply_txn_cmd(
         &self,
         req: &TxnRequest,
@@ -606,7 +606,7 @@ impl StateMachine {
     /// Already applied log should be filtered out before passing into this function.
     /// This is the only entry to modify state machine.
     /// The `cmd` is always committed by raft before applying.
-    #[tracing::instrument(level = "debug", skip(self, cmd, txn_tree))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, cmd, txn_tree))]
     pub fn apply_cmd(
         &self,
         cmd: &Cmd,

@@ -70,7 +70,7 @@ impl Processor for SourceTransform {
         self
     }
 
-    #[tracing::instrument(level = "debug", name="source_execute", skip(self), fields(ctx.id = self.ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", name="source_execute", skip(self), fields(ctx.id = self.ctx.get_id().as_str()))]
     async fn execute(&self) -> Result<SendableDataBlockStream> {
         let desc = self.source_plan.source_info.desc();
         tracing::debug!("execute, table:{:#} ...", desc);

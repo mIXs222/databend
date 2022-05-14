@@ -99,7 +99,7 @@ impl CopyInterpreter {
     // 3. Read from the stream and write to the table.
     // Note:
     //  We parse the `s3://` to ReadSourcePlan instead of to a SELECT plan is that:
-    #[tracing::instrument(level = "debug", name = "copy_files_to_table", skip(self), fields(ctx.id = self.ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", name = "copy_files_to_table", skip(self), fields(ctx.id = self.ctx.get_id().as_str()))]
     async fn copy_files_to_table(&self, files: Vec<String>) -> Result<Vec<DataBlock>> {
         let ctx = self.ctx.clone();
         let settings = self.ctx.get_settings();
@@ -157,7 +157,7 @@ impl Interpreter for CopyInterpreter {
         "CopyInterpreter"
     }
 
-    #[tracing::instrument(level = "debug", name = "copy_interpreter_execute", skip(self, _input_stream), fields(ctx.id = self.ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", name = "copy_interpreter_execute", skip(self, _input_stream), fields(ctx.id = self.ctx.get_id().as_str()))]
     async fn execute(
         &self,
         mut _input_stream: Option<SendableDataBlockStream>,

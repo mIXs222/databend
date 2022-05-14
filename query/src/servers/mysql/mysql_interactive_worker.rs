@@ -268,7 +268,7 @@ impl<W: std::io::Write> InteractiveWorkerBase<W> {
         federated.check(query)
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn do_query(&mut self, query: &str) -> Result<(Vec<DataBlock>, String)> {
         match self.federated_server_command_check(query) {
             Some(data_block) => {
@@ -350,7 +350,7 @@ impl<W: std::io::Write> InteractiveWorkerBase<W> {
         }
     }
 
-    #[tracing::instrument(level = "debug", skip(interpreter, context))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(interpreter, context))]
     async fn exec_query(
         interpreter: Arc<dyn Interpreter>,
         context: &Arc<QueryContext>,

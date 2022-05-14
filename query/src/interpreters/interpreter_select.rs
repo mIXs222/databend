@@ -64,7 +64,7 @@ impl Interpreter for SelectInterpreter {
         self.select.schema()
     }
 
-    #[tracing::instrument(level = "debug", name = "select_interpreter_execute", skip(self, _input_stream), fields(ctx.id = self.ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", name = "select_interpreter_execute", skip(self, _input_stream), fields(ctx.id = self.ctx.get_id().as_str()))]
     /// Currently, the method has two sets of logic, if `get_enable_new_processor_framework` is turned on in the settings,
     /// the execution will use the new processor, otherwise the old processing logic will be executed.
     /// Note: there is an issue to track the progress of the new processor:  https://github.com/datafuselabs/databend/issues/3379

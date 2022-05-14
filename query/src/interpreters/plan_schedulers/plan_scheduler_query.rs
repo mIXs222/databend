@@ -27,7 +27,7 @@ use crate::interpreters::PlanScheduler;
 use crate::pipelines::processors::PipelineBuilder;
 use crate::sessions::QueryContext;
 
-#[tracing::instrument(level = "debug", skip(ctx), fields(ctx.id = ctx.get_id().as_str()))]
+#[tracing::instrument(err(Debug), level = "debug", skip(ctx), fields(ctx.id = ctx.get_id().as_str()))]
 pub async fn schedule_query(
     ctx: &Arc<QueryContext>,
     plan: &PlanNode,

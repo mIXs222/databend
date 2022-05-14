@@ -1,0 +1,8 @@
+dir = "metadata/_logs"
+admin_api_address = "127.0.0.1:8101"
+grpc_api_address = "127.0.0.1:9101"
+
+[raft_config]
+id = 1
+single = true
+raft_dir = "metadata/datas"

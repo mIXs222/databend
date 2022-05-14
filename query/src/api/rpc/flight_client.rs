@@ -59,7 +59,7 @@ impl FlightClient {
     }
 
     // Execute do_get.
-    #[tracing::instrument(level = "debug", skip_all)]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all)]
     async fn do_get(&mut self, ticket: Ticket, timeout: u64) -> Result<Streaming<FlightData>> {
         let request = Request::new(ticket);
         let mut request = common_tracing::inject_span_to_tonic_request(request);
@@ -70,7 +70,7 @@ impl FlightClient {
     }
 
     // Execute do_action.
-    #[tracing::instrument(level = "debug", skip_all)]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all)]
     async fn do_action(&mut self, action: FlightAction, timeout: u64) -> Result<Vec<u8>> {
         let action: Action = action.try_into()?;
         let action_type = action.r#type.clone();

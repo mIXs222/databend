@@ -49,7 +49,7 @@ impl<'a> MetaLeader<'a> {
         MetaLeader { meta_node }
     }
 
-    #[tracing::instrument(level = "debug", skip(self, req), fields(target=%req.forward_to_leader))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, req), fields(target=%req.forward_to_leader))]
     pub async fn handle_forwardable_req(
         &self,
         req: ForwardRequest,
@@ -94,7 +94,7 @@ impl<'a> MetaLeader<'a> {
     /// - Adds the node to membership to let it become a voter.
     ///
     /// If the node is already in cluster membership, it still returns Ok.
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     pub async fn join(&self, req: JoinRequest) -> Result<(), MetaError> {
         let node_id = req.node_id;
         let endpoint = req.endpoint;
@@ -135,7 +135,7 @@ impl<'a> MetaLeader<'a> {
     /// - Remove the node from membership.
     ///
     /// If the node is not in cluster membership, it still returns Ok.
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     pub async fn leave(&self, req: LeaveRequest) -> Result<(), MetaError> {
         let node_id = req.node_id;
         let metrics = self.meta_node.raft.metrics().borrow().clone();
@@ -162,7 +162,7 @@ impl<'a> MetaLeader<'a> {
         Ok(())
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     pub async fn change_membership(&self, membership: BTreeSet<NodeId>) -> Result<(), MetaError> {
         let res = self
             .meta_node
@@ -195,7 +195,7 @@ impl<'a> MetaLeader<'a> {
     /// If the raft node is not a leader, it returns MetaRaftError::ForwardToLeader.
     /// If the leadership is lost during writing the log, it returns an UnknownError.
     /// TODO(xp): elaborate the UnknownError, e.g. LeaderLostError
-    #[tracing::instrument(level = "debug", skip(self, entry))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, entry))]
     pub async fn write(&self, entry: LogEntry) -> Result<AppliedState, MetaError> {
         tracing::debug!(entry = debug(&entry), "write LogEntry");
         let write_rst = self

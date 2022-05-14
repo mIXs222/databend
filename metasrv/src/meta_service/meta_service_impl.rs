@@ -52,7 +52,7 @@ impl RaftServiceImpl {
 impl RaftService for RaftServiceImpl {
     /// Handles a write request.
     /// This node must be leader or an error returned.
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn write(
         &self,
         request: tonic::Request<RaftRequest>,
@@ -85,7 +85,7 @@ impl RaftService for RaftServiceImpl {
         return Ok(tonic::Response::new(raft_reply));
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn get(
         &self,
         request: tonic::Request<GetRequest>,
@@ -102,7 +102,7 @@ impl RaftService for RaftServiceImpl {
         Ok(tonic::Response::new(rst))
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn forward(
         &self,
         request: tonic::Request<RaftRequest>,
@@ -121,7 +121,7 @@ impl RaftService for RaftServiceImpl {
         Ok(tonic::Response::new(raft_mes))
     }
 
-    #[tracing::instrument(level = "debug", skip(self, request))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, request))]
     async fn append_entries(
         &self,
         request: tonic::Request<RaftRequest>,
@@ -148,7 +148,7 @@ impl RaftService for RaftServiceImpl {
         Ok(tonic::Response::new(mes))
     }
 
-    #[tracing::instrument(level = "debug", skip(self, request))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, request))]
     async fn install_snapshot(
         &self,
         request: tonic::Request<RaftRequest>,
@@ -175,7 +175,7 @@ impl RaftService for RaftServiceImpl {
         Ok(tonic::Response::new(mes))
     }
 
-    #[tracing::instrument(level = "debug", skip(self, request))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, request))]
     async fn vote(
         &self,
         request: tonic::Request<RaftRequest>,

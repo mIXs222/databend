@@ -101,7 +101,7 @@ impl FlightService for DatabendQueryFlightService {
 
     type DoGetStream = FlightStream<FlightData>;
 
-    #[tracing::instrument(level = "debug", skip_all)]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all)]
     async fn do_get(&self, request: Request<Ticket>) -> Response<Self::DoGetStream> {
         common_tracing::extract_remote_span_as_parent(&request);
         let ticket: FlightTicket = request.into_inner().try_into()?;
@@ -140,7 +140,7 @@ impl FlightService for DatabendQueryFlightService {
 
     type DoActionStream = FlightStream<FlightResult>;
 
-    #[tracing::instrument(level = "debug", skip_all)]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all)]
     async fn do_action(&self, request: Request<Action>) -> Response<Self::DoActionStream> {
         common_tracing::extract_remote_span_as_parent(&request);
 
@@ -194,7 +194,7 @@ impl FlightService for DatabendQueryFlightService {
 
     type ListActionsStream = FlightStream<ActionType>;
 
-    #[tracing::instrument(level = "debug", skip_all)]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all)]
     async fn list_actions(&self, request: Request<Empty>) -> Response<Self::ListActionsStream> {
         common_tracing::extract_remote_span_as_parent(&request);
         Result::Ok(RawResponse::new(

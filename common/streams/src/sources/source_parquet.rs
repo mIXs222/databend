@@ -97,7 +97,7 @@ where R: AsyncRead + AsyncSeek + Unpin + Send
 impl<R> Source for ParquetSource<R>
 where R: AsyncRead + AsyncSeek + Unpin + Send
 {
-    #[tracing::instrument(level = "debug", skip_all)]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all)]
     async fn read(&mut self) -> Result<Option<DataBlock>> {
         let fetched_metadata;
         let metadata = match &self.builder.metadata {

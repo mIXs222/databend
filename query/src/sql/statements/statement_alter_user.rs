@@ -37,7 +37,7 @@ pub struct DfAlterUser {
 
 #[async_trait::async_trait]
 impl AnalyzableStatement for DfAlterUser {
-    #[tracing::instrument(level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
     async fn analyze(&self, ctx: Arc<QueryContext>) -> Result<AnalyzedResult> {
         let user_info = if self.if_current_user {
             ctx.get_current_user()?

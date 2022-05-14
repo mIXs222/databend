@@ -38,7 +38,7 @@ pub struct DfCreateDatabase {
 
 #[async_trait::async_trait]
 impl AnalyzableStatement for DfCreateDatabase {
-    #[tracing::instrument(level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
     async fn analyze(&self, ctx: Arc<QueryContext>) -> Result<AnalyzedResult> {
         let tenant = ctx.get_tenant();
         let (catalog, db) = resolve_database(&ctx, &self.name, "CREATE DATABASE")?;

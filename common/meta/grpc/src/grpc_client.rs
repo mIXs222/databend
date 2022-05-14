@@ -119,7 +119,7 @@ impl MetaGrpcClient {
         })
     }
 
-    #[tracing::instrument(level = "debug", skip(password))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(password))]
     pub async fn try_create(
         addr: &str,
         username: &str,
@@ -138,7 +138,7 @@ impl MetaGrpcClient {
         })
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     pub async fn make_client(
         &self,
     ) -> std::result::Result<
@@ -166,7 +166,7 @@ impl MetaGrpcClient {
     }
 
     /// Handshake.
-    #[tracing::instrument(level = "debug", skip(client, password))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(client, password))]
     async fn handshake(
         client: &mut MetaServiceClient<Channel>,
         username: &str,
@@ -194,7 +194,7 @@ impl MetaGrpcClient {
         Ok(token)
     }
 
-    #[tracing::instrument(level = "debug", skip(self, v))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, v))]
     pub(crate) async fn do_write<T, R>(&self, v: T) -> std::result::Result<R, MetaError>
     where
         T: RequestFor<Reply = R> + Into<MetaGrpcWriteReq>,
@@ -231,7 +231,7 @@ impl MetaGrpcClient {
         res
     }
 
-    #[tracing::instrument(level = "debug", skip(self, v))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, v))]
     pub(crate) async fn do_read<T, R>(&self, v: T) -> std::result::Result<R, MetaError>
     where
         T: RequestFor<Reply = R>,
@@ -273,7 +273,7 @@ impl MetaGrpcClient {
         res
     }
 
-    #[tracing::instrument(level = "debug", skip(self, req))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, req))]
     pub(crate) async fn transaction(
         &self,
         req: TxnRequest,

@@ -31,7 +31,7 @@ pub struct DfDropUDF {
 
 #[async_trait::async_trait]
 impl AnalyzableStatement for DfDropUDF {
-    #[tracing::instrument(level = "info", skip(self, _ctx), fields(ctx.id = _ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "info", skip(self, _ctx), fields(ctx.id = _ctx.get_id().as_str()))]
     async fn analyze(&self, _ctx: Arc<QueryContext>) -> Result<AnalyzedResult> {
         Ok(AnalyzedResult::SimpleQuery(Box::new(
             PlanNode::DropUserUDF(DropUserUDFPlan {

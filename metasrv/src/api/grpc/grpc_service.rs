@@ -82,7 +82,7 @@ impl MetaService for MetaServiceImpl {
     type HandshakeStream = GrpcStream<HandshakeResponse>;
 
     // rpc handshake first
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn handshake(
         &self,
         request: Request<Streaming<HandshakeRequest>>,
@@ -171,7 +171,7 @@ impl MetaService for MetaServiceImpl {
     type WatchStream =
         Pin<Box<dyn Stream<Item = Result<WatchResponse, tonic::Status>> + Send + Sync + 'static>>;
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn watch(
         &self,
         request: Request<WatchRequest>,

@@ -248,7 +248,7 @@ impl SledTree {
         Ok(Some((key, value)))
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     pub async fn remove<KV>(&self, key: &KV::K, flush: bool) -> MetaStorageResult<Option<KV::V>>
     where KV: SledKeySpace {
         let removed = self
@@ -267,7 +267,7 @@ impl SledTree {
     }
 
     /// Delete kvs that are in `range`.
-    #[tracing::instrument(level = "debug", skip(self, range))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, range))]
     pub async fn range_remove<KV, R>(&self, range: R, flush: bool) -> MetaStorageResult<()>
     where
         KV: SledKeySpace,
@@ -429,7 +429,7 @@ impl SledTree {
 
     /// Append many values into SledTree.
     /// This could be used in cases the key is included in value and a value should impl trait `IntoKey` to retrieve the key from a value.
-    #[tracing::instrument(level = "debug", skip(self, values))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, values))]
     pub async fn append_values<KV>(&self, values: &[KV::V]) -> MetaStorageResult<()>
     where
         KV: SledKeySpace,
@@ -478,7 +478,7 @@ impl SledTree {
     }
 
     /// Insert a single kv, Retrieve the key from value.
-    #[tracing::instrument(level = "debug", skip(self, value))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, value))]
     pub async fn insert_value<KV>(&self, value: &KV::V) -> MetaStorageResult<Option<KV::V>>
     where
         KV: SledKeySpace,
@@ -503,7 +503,7 @@ impl SledTree {
         )
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn flush_async(&self, flush: bool) -> MetaStorageResult<()> {
         if flush && self.sync {
             self.tree

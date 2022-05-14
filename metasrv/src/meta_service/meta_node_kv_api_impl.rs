@@ -61,7 +61,7 @@ impl KVApi for MetaNode {
         }
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn get_kv(&self, key: &str) -> Result<GetKVActionReply, MetaError> {
         let res = self
             .consistent_read(GetKVReq {
@@ -72,7 +72,7 @@ impl KVApi for MetaNode {
         Ok(res)
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn mget_kv(&self, keys: &[String]) -> Result<MGetKVActionReply, MetaError> {
         let res = self
             .consistent_read(MGetKVReq {
@@ -83,7 +83,7 @@ impl KVApi for MetaNode {
         Ok(res)
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn prefix_list_kv(&self, prefix: &str) -> Result<PrefixListReply, MetaError> {
         let res = self
             .consistent_read(ListKVReq {
@@ -94,7 +94,7 @@ impl KVApi for MetaNode {
         Ok(res)
     }
 
-    #[tracing::instrument(level = "debug", skip(self, txn), fields(txn=display(&txn)))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, txn), fields(txn=display(&txn)))]
     async fn transaction(&self, txn: TxnRequest) -> Result<TxnReply, MetaError> {
         let ent = LogEntry {
             txid: None,

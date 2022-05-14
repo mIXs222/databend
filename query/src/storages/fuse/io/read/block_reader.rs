@@ -217,7 +217,7 @@ impl BlockReader {
         }
     }
 
-    #[tracing::instrument(level = "debug", skip_all)]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all)]
     pub async fn read(&self, part: PartInfoPtr) -> Result<DataBlock> {
         let (num_rows, columns_array_iter) = self.read_columns(part).await?;
         let mut deserializer = RowGroupDeserializer::new(columns_array_iter, num_rows, None);

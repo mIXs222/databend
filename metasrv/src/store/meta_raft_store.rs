@@ -114,7 +114,7 @@ impl MetaRaftStore {
     /// 1. If `open` is `Some`, try to open an existent one.
     /// 2. If `create` is `Some`, try to create one.
     /// Otherwise it panic
-    #[tracing::instrument(level = "debug", skip(config,open,create), fields(config_id=%config.config_id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(config,open,create), fields(config_id=%config.config_id))]
     pub async fn open_create(
         config: &RaftConfig,
         open: Option<()>,
@@ -160,7 +160,7 @@ impl MetaRaftStore {
     }
 
     /// Install a snapshot to build a state machine from it and replace the old state machine with the new one.
-    #[tracing::instrument(level = "debug", skip(self, data))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, data))]
     pub async fn install_snapshot(&self, data: &[u8]) -> Result<(), MetaStorageError> {
         let mut sm = self.state_machine.write().await;
 
@@ -229,7 +229,7 @@ impl MetaRaftStore {
         Ok(())
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     pub async fn export(&self) -> Result<Vec<String>, std::io::Error> {
         let mut res = vec![];
 
@@ -279,7 +279,7 @@ impl MetaRaftStore {
 impl RaftStorage<LogEntry, AppliedState> for MetaRaftStore {
     type SnapshotData = Cursor<Vec<u8>>;
 
-    #[tracing::instrument(level = "debug", skip(self, hs), fields(id=self.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, hs), fields(id=self.id))]
     async fn save_hard_state(&self, hs: &HardState) -> Result<(), StorageError> {
         self.raft_state
             .write_hard_state(hs)
@@ -288,7 +288,7 @@ impl RaftStorage<LogEntry, AppliedState> for MetaRaftStore {
         Ok(())
     }
 
-    #[tracing::instrument(level = "debug", skip(self), fields(id=self.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self), fields(id=self.id))]
     async fn try_get_log_entries<RB: RangeBounds<u64> + Clone + Debug + Send + Sync>(
         &self,
         range: RB,
@@ -301,7 +301,7 @@ impl RaftStorage<LogEntry, AppliedState> for MetaRaftStore {
         Ok(entries)
     }
 
-    #[tracing::instrument(level = "debug", skip(self), fields(id=self.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self), fields(id=self.id))]
     async fn delete_conflict_logs_since(&self, log_id: LogId) -> Result<(), StorageError> {
         self.log
             .range_remove(log_id.index..)
@@ -311,7 +311,7 @@ impl RaftStorage<LogEntry, AppliedState> for MetaRaftStore {
         Ok(())
     }
 
-    #[tracing::instrument(level = "debug", skip(self), fields(id=self.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self), fields(id=self.id))]
     async fn purge_logs_upto(&self, log_id: LogId) -> Result<(), StorageError> {
         self.log
             .set_last_purged(log_id)
@@ -325,7 +325,7 @@ impl RaftStorage<LogEntry, AppliedState> for MetaRaftStore {
         Ok(())
     }
 
-    #[tracing::instrument(level = "debug", skip(self, entries), fields(id=self.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, entries), fields(id=self.id))]
     async fn append_to_log(&self, entries: &[&Entry<LogEntry>]) -> Result<(), StorageError> {
         // TODO(xp): replicated_to_log should not block. Do the actual work in another task.
         let entries = entries.iter().map(|x| (*x).clone()).collect::<Vec<_>>();
@@ -336,7 +336,7 @@ impl RaftStorage<LogEntry, AppliedState> for MetaRaftStore {
         Ok(())
     }
 
-    #[tracing::instrument(level = "debug", skip(self, entries), fields(id=self.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, entries), fields(id=self.id))]
     async fn apply_to_state_machine(
         &self,
         entries: &[&Entry<LogEntry>],
@@ -354,7 +354,7 @@ impl RaftStorage<LogEntry, AppliedState> for MetaRaftStore {
         Ok(res)
     }
 
-    #[tracing::instrument(level = "debug", skip(self), fields(id=self.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self), fields(id=self.id))]
     async fn build_snapshot(
         &self,
     ) -> Result<openraft::storage::Snapshot<Self::SnapshotData>, StorageError> {
@@ -401,12 +401,12 @@ impl RaftStorage<LogEntry, AppliedState> for MetaRaftStore {
         })
     }
 
-    #[tracing::instrument(level = "debug", skip(self), fields(id=self.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self), fields(id=self.id))]
     async fn begin_receiving_snapshot(&self) -> Result<Box<Self::SnapshotData>, StorageError> {
         Ok(Box::new(Cursor::new(Vec::new())))
     }
 
-    #[tracing::instrument(level = "debug", skip(self, snapshot), fields(id=self.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, snapshot), fields(id=self.id))]
     async fn install_snapshot(
         &self,
         meta: &SnapshotMeta,
@@ -446,7 +446,7 @@ impl RaftStorage<LogEntry, AppliedState> for MetaRaftStore {
         })
     }
 
-    #[tracing::instrument(level = "debug", skip(self), fields(id=self.id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self), fields(id=self.id))]
     async fn get_current_snapshot(
         &self,
     ) -> Result<Option<openraft::storage::Snapshot<Self::SnapshotData>>, StorageError> {
@@ -467,7 +467,7 @@ impl RaftStorage<LogEntry, AppliedState> for MetaRaftStore {
         snap
     }
 
-    #[tracing::instrument(level = "debug", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self))]
     async fn read_hard_state(&self) -> Result<Option<HardState>, StorageError> {
         let hard_state = self
             .raft_state

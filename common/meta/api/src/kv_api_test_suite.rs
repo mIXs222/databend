@@ -45,7 +45,7 @@ use crate::KVApiBuilder;
 pub struct KVApiTestSuite {}
 
 impl KVApiTestSuite {
-    #[tracing::instrument(level = "info", skip(self, builder))]
+    #[tracing::instrument(err(Debug), level = "info", skip(self, builder))]
     pub async fn test_all<KV, B>(&self, builder: B) -> anyhow::Result<()>
     where
         KV: KVApi,
@@ -79,7 +79,7 @@ impl KVApiTestSuite {
 }
 
 impl KVApiTestSuite {
-    #[tracing::instrument(level = "info", skip(self, kv))]
+    #[tracing::instrument(err(Debug), level = "info", skip(self, kv))]
     pub async fn kv_write_read<KV: KVApi>(&self, kv: &KV) -> anyhow::Result<()> {
         {
             // write
@@ -140,7 +140,7 @@ impl KVApiTestSuite {
         Ok(())
     }
 
-    #[tracing::instrument(level = "info", skip(self, kv))]
+    #[tracing::instrument(err(Debug), level = "info", skip(self, kv))]
     pub async fn kv_delete<KV: KVApi>(&self, kv: &KV) -> anyhow::Result<()> {
         let test_key = "test_key";
         kv.upsert_kv(UpsertKVAction::new(
@@ -221,7 +221,7 @@ impl KVApiTestSuite {
         Ok(())
     }
 
-    #[tracing::instrument(level = "info", skip(self, kv))]
+    #[tracing::instrument(err(Debug), level = "info", skip(self, kv))]
     pub async fn kv_update<KV: KVApi>(&self, kv: &KV) -> anyhow::Result<()> {
         let test_key = "test_key_for_update";
 
@@ -293,7 +293,7 @@ impl KVApiTestSuite {
         Ok(())
     }
 
-    #[tracing::instrument(level = "info", skip(self, kv))]
+    #[tracing::instrument(err(Debug), level = "info", skip(self, kv))]
     pub async fn kv_timeout<KV: KVApi>(&self, kv: &KV) -> anyhow::Result<()> {
         // - Test get  expired and non-expired.
         // - Test mget expired and non-expired.
@@ -396,7 +396,7 @@ impl KVApiTestSuite {
         Ok(())
     }
 
-    #[tracing::instrument(level = "info", skip(self, kv))]
+    #[tracing::instrument(err(Debug), level = "info", skip(self, kv))]
     pub async fn kv_meta<KV: KVApi>(&self, kv: &KV) -> anyhow::Result<()> {
         let test_key = "test_key_for_update_meta";
 
@@ -472,7 +472,7 @@ impl KVApiTestSuite {
         Ok(())
     }
 
-    #[tracing::instrument(level = "info", skip(self, kv))]
+    #[tracing::instrument(err(Debug), level = "info", skip(self, kv))]
     pub async fn kv_list<KV: KVApi>(&self, kv: &KV) -> anyhow::Result<()> {
         let mut values = vec![];
         {
@@ -518,7 +518,7 @@ impl KVApiTestSuite {
         Ok(())
     }
 
-    #[tracing::instrument(level = "info", skip(self, kv))]
+    #[tracing::instrument(err(Debug), level = "info", skip(self, kv))]
     pub async fn kv_mget<KV: KVApi>(&self, kv: &KV) -> anyhow::Result<()> {
         kv.upsert_kv(UpsertKVAction::new(
             "k1",
@@ -913,7 +913,7 @@ impl KVApiTestSuite {
 
 /// Test that write and read should be forwarded to leader
 impl KVApiTestSuite {
-    #[tracing::instrument(level = "info", skip(self, kv1, kv2))]
+    #[tracing::instrument(err(Debug), level = "info", skip(self, kv1, kv2))]
     pub async fn kv_write_read_across_nodes<KV: KVApi>(
         &self,
         kv1: &KV,

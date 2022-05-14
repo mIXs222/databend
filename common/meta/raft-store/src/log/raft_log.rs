@@ -41,7 +41,7 @@ pub struct RaftLog {
 
 impl RaftLog {
     /// Open RaftLog
-    #[tracing::instrument(level = "debug", skip(db,config), fields(config_id=%config.config_id))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(db,config), fields(config_id=%config.config_id))]
     pub async fn open(db: &sled::Db, config: &RaftConfig) -> MetaStorageResult<RaftLog> {
         tracing::info!(?config);
 
@@ -134,7 +134,7 @@ impl RaftLog {
     }
 
     /// Insert a single log.
-    #[tracing::instrument(level = "debug", skip(self, log), fields(log_id=format!("{}",log.log_id).as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, log), fields(log_id=format!("{}",log.log_id).as_str()))]
     pub async fn insert(
         &self,
         log: &Entry<LogEntry>,

@@ -39,7 +39,7 @@ impl DfShowDatabases {
 
 #[async_trait::async_trait]
 impl AnalyzableStatement for DfShowDatabases {
-    #[tracing::instrument(level = "debug", skip(self, _ctx), fields(ctx.id = _ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, _ctx), fields(ctx.id = _ctx.get_id().as_str()))]
     async fn analyze(&self, _ctx: Arc<QueryContext>) -> Result<AnalyzedResult> {
         let mut kind = PlanShowKind::All;
         match &self.kind {

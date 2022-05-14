@@ -42,6 +42,8 @@ use tracing_subscriber::registry::LookupSpan;
 use tracing_subscriber::EnvFilter;
 use tracing_subscriber::Registry;
 
+use coruscant_subscriber::dependency::DependencyLayer;
+
 /// Init tracing for unittest.
 /// Write logs to file `unittest`.
 pub fn init_default_ut_tracing() {
@@ -93,16 +95,24 @@ pub fn init_global_tracing(app_name: &str, dir: &str, level: &str) -> Vec<Worker
         .expect("install");
     let jaeger_layer = Some(tracing_opentelemetry::layer().with_tracer(tracer));
 
+    // Coruscant
+    let (dep_layer, dep_processor) = DependencyLayer::construct();
+    dep_processor.install_periodic_write_threaded();
+
     // Use env RUST_LOG to initialize log if present.
     // Otherwise use the specified level.
     let directives = env::var(EnvFilter::DEFAULT_ENV).unwrap_or_else(|_x| level.to_string());
     let env_filter = EnvFilter::new(directives);
-    let subscriber = Registry::default()
-        .with(env_filter)
+    let _subscriber = Registry::default()
+        // .with(env_filter)
         .with(JsonStorageLayer)
-        .with(stdout_logging_layer)
+        // .with(stdout_logging_layer)
         .with(file_logging_layer)
         .with(jaeger_layer);
+    let subscriber = Registry::default()
+        .with(env_filter)
+        .with(stdout_logging_layer)
+        .with(dep_layer);
 
     #[cfg(feature = "console")]
     let subscriber = subscriber.with(console_subscriber::spawn());

@@ -33,7 +33,7 @@ pub struct DfDropTable {
 
 #[async_trait::async_trait]
 impl AnalyzableStatement for DfDropTable {
-    #[tracing::instrument(level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
     async fn analyze(&self, ctx: Arc<QueryContext>) -> Result<AnalyzedResult> {
         let if_exists = self.if_exists;
         let tenant = ctx.get_tenant();

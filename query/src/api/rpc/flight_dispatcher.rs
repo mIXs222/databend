@@ -73,7 +73,7 @@ impl DatabendQueryFlightDispatcher {
         self.abort.load(Ordering::Relaxed)
     }
 
-    #[tracing::instrument(level = "debug", skip_all)]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all)]
     pub fn get_stream(
         &self,
         ticket: &StreamTicket,
@@ -90,7 +90,7 @@ impl DatabendQueryFlightDispatcher {
         }
     }
 
-    #[tracing::instrument(level = "debug", skip_all, fields(session.id = session.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all, fields(session.id = session.get_id().as_str()))]
     pub async fn broadcast_action(&self, session: SessionRef, action: FlightAction) -> Result<()> {
         let query_id = action.get_query_id();
         let stage_id = action.get_stage_id();
@@ -108,7 +108,7 @@ impl DatabendQueryFlightDispatcher {
         }
     }
 
-    #[tracing::instrument(level = "debug", skip_all, fields(session.id = session.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all, fields(session.id = session.get_id().as_str()))]
     pub async fn shuffle_action(&self, session: SessionRef, action: FlightAction) -> Result<()> {
         let query_id = action.get_query_id();
         let stage_id = action.get_stage_id();
@@ -126,7 +126,7 @@ impl DatabendQueryFlightDispatcher {
         }
     }
 
-    #[tracing::instrument(level = "debug", skip_all, fields(session.id = session.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all, fields(session.id = session.get_id().as_str()))]
     async fn one_sink_action(&self, session: SessionRef, action: &FlightAction) -> Result<()> {
         let query_context = session.create_query_context().await?;
         let action_context = QueryContext::create_from(query_context.clone());
@@ -175,7 +175,7 @@ impl DatabendQueryFlightDispatcher {
         Ok(())
     }
 
-    #[tracing::instrument(level = "debug", skip_all, fields(session.id = session.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip_all, fields(session.id = session.get_id().as_str()))]
     async fn action_with_scatter<T>(
         &self,
         session: SessionRef,

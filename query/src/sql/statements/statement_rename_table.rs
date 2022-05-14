@@ -34,7 +34,7 @@ pub struct DfRenameTable {
 
 #[async_trait::async_trait]
 impl AnalyzableStatement for DfRenameTable {
-    #[tracing::instrument(level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
     async fn analyze(&self, ctx: Arc<QueryContext>) -> Result<AnalyzedResult> {
         let tenant = ctx.get_tenant();
         let mut entities = Vec::new();

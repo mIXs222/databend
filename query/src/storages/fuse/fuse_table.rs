@@ -96,7 +96,7 @@ impl FuseTable {
         Ok(format!("{}/{}", db_id, table_id))
     }
 
-    #[tracing::instrument(level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
     pub(crate) async fn read_table_snapshot(
         &self,
         ctx: &QueryContext,
@@ -163,7 +163,7 @@ impl Table for FuseTable {
         true
     }
 
-    #[tracing::instrument(level = "debug", name = "fuse_table_read_partitions", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", name = "fuse_table_read_partitions", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
     async fn read_partitions(
         &self,
         ctx: Arc<QueryContext>,
@@ -172,7 +172,7 @@ impl Table for FuseTable {
         self.do_read_partitions(ctx, push_downs).await
     }
 
-    #[tracing::instrument(level = "debug", name = "fuse_table_read", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", name = "fuse_table_read", skip(self, ctx), fields(ctx.id = ctx.get_id().as_str()))]
     async fn read(
         &self,
         ctx: Arc<QueryContext>,
@@ -181,7 +181,7 @@ impl Table for FuseTable {
         self.do_read(ctx, &plan.push_downs).await
     }
 
-    #[tracing::instrument(level = "debug", name = "fuse_table_read2", skip(self, ctx, pipeline), fields(ctx.id = ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", name = "fuse_table_read2", skip(self, ctx, pipeline), fields(ctx.id = ctx.get_id().as_str()))]
     fn read2(
         &self,
         ctx: Arc<QueryContext>,
@@ -195,7 +195,7 @@ impl Table for FuseTable {
         self.do_append2(ctx, pipeline)
     }
 
-    #[tracing::instrument(level = "debug", name = "fuse_table_append_data", skip(self, ctx, stream), fields(ctx.id = ctx.get_id().as_str()))]
+    #[tracing::instrument(err(Debug), level = "debug", name = "fuse_table_append_data", skip(self, ctx, stream), fields(ctx.id = ctx.get_id().as_str()))]
     async fn append_data(
         &self,
         ctx: Arc<QueryContext>,

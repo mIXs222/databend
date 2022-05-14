@@ -82,7 +82,7 @@ impl Processor for SinkTransform {
         self
     }
 
-    #[tracing::instrument(level = "debug", name = "sink_execute", skip(self))]
+    #[tracing::instrument(err(Debug), level = "debug", name = "sink_execute", skip(self))]
     async fn execute(&self) -> Result<SendableDataBlockStream> {
         tracing::debug!("executing sinks transform");
         let tbl = self
